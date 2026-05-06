@@ -1,52 +1,108 @@
-# ProcessBench
+# RoboProcessBench
 
-This repository provides the executable ProcessBench evaluation suite. It includes dataset validation, scoring, and reconstruction utilities. The benchmark artifacts are hosted on Hugging Face; this repository consumes those artifacts and reproduces the reported evaluation results for `ProcessEval-7B`.
+RoboProcessBench is a comprehensive benchmark for evaluating robotic process learning and understanding. This repository contains the evaluation suite, dataset utilities, and scoring tools for the RoboProcessBench paper.
 
-## What This Repository Contains
+## Repository Contents
 
-- a clean Python package under `processbench/`
-- reviewer-facing CLI entrypoints under `scripts/`
-- minimal configs under `configs/`
-- lightweight examples under `examples/`
-- reviewer-oriented docs under `docs/`
-- unit tests for schema, parsing, scoring, and bootstrap logic under `tests/`
+- **`scripts/`** — Evaluation and data processing scripts
+  - `download_hf_artifacts.py` — Download benchmark datasets from Hugging Face
+  - `score_evaluations.py` — Score model predictions against benchmarks
+  - `score_vlm.py` — Score vision language model predictions
+  - `run_evaluations.py` — Execute full evaluation pipelines
+  - `extract_frames_*.py` — Video frame extraction for various datasets (AIST++, GM-100, RH20T)
+  - `split_sft_eval.py` — Split SFT and evaluation datasets
+  - `eval_vlm.sh`, `post-train_vlm.sh` — VLM evaluation and post-training scripts
 
-## What Is Hosted On Hugging Face
+- **`configs/`** — Configuration files
+  - YAML configs for evaluation, post-training, HF datasets, and SFT data processing
 
-The dataset artifact of record lives on Hugging Face.
+- **`docs/`** — Documentation
+  - `quickstart.md` — Get started in 4 steps
+  - `evaluation_protocol.md` — Detailed evaluation methodology
 
-- dataset repo: `ProcessBench-2026/ProcessBench-Anom`
-- expected artifacts: eval/SFT summaries, split manifests, task-distribution stats, example task cards, `ProcessEval-7B` predictions, executable benchmark suite, and Croissant metadata.
+- **`data/`** — Data directory (populated after downloading artifacts)
 
-## Minimal Review Loop
+- **`outputs/`** — Results and evaluation outputs
+
+- **`environment.yml`** — Conda environment specification
+
+- **`requirements.txt`** — Python package dependencies
+
+## Repository Structure
+
+```
+ProcessBench-GitHub/
+├── configs/                       # Configuration files
+│   ├── evaluation.yaml
+│   ├── post-train_lora.yaml
+│   ├── hf_dataset.yaml
+│   ├── processdata-sft-intern.yaml
+│   └── processdata-sft-qwen.yaml
+├── scripts/                       # Evaluation and processing scripts
+│   ├── download_hf_artifacts.py
+│   ├── score_vlm.py
+│   ├── score_evaluations.py
+│   ├── run_evaluations.py
+│   ├── extract_frames_*.py
+│   ├── split_sft_eval.py
+│   ├── eval_vlm.sh
+│   └── post-train_vlm.sh
+├── docs/                          # Documentation
+│   ├── quickstart.md
+│   └── evaluation_protocol.md
+├── data/                          # Benchmark datasets (download via scripts)
+├── outputs/                       # Evaluation results
+├── environment.yml                # Conda environment
+├── requirements.txt               # Python dependencies
+└── README.md                      # This file
+```
+
+## Quick Start
+
+### 1. Install Environment
 
 ```bash
-# 1. Install
 conda env create -f environment.yml
 conda activate processbench
-
-# 2. Download benchmark artifacts from Hugging Face
-python scripts/download_hf_artifacts.py \
-  --repo ProcessBench-2026/ProcessBench-Anom \
-  --out data/
-
-# 3. Score provided predictions
-python scripts/score_results.py \
-    --test-json sharegpt_export_v1/test_sharegpt.json \
-    --predictions SFT_results/ProcessEval-7B_predictions.jsonl \
-    --pred-key predict \
-    --output-json outputs/ProcessEval_results.json
 ```
 
-## Installation
-
-### Minimal scoring / validation environment
+### 2. Download Benchmark Artifacts
 
 ```bash
-pip install -r requirements.txt
+python scripts/download_hf_artifacts.py \
+  --repo ProcessBench-2026/RoboProcessBench \
+  --out data/
 ```
 
-## Optional Reconstruction
+### 3. Run Evaluations
+
+```bash
+python scripts/score_evaluations.py \
+  --input data/predictions.jsonl \
+  --output outputs/scores.json
+```
+
+### 4. View Results
+
+Results are saved to `outputs/` in JSON format.
+
+## Dependencies
+
+- Python 3.11+
+- PyYAML, Hugging Face Hub, Pillow, NumPy, Pandas, PyArrow
+- Transformers, Datasets, PEFT, TRL, DeepSpeed, Accelerate
+- LLamaFactory 0.9.3
+
+See `requirements.txt` for full list.
+
+## Documentation
+
+- **[Quickstart Guide](docs/quickstart.md)** — Get up and running quickly
+- **[Evaluation Protocol](docs/evaluation_protocol.md)** — Detailed benchmark methodology
+
+## License
+
+See [LICENSE](LICENSE) file for details.
 
 See `docs/reconstruction.md` for how public release references map to upstream source episodes and recordings. Full visual reconstruction requires access to the upstream datasets under their original terms.
 

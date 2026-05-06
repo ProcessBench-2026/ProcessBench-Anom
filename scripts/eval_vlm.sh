@@ -1,0 +1,17 @@
+llamafactory-cli train \
+    --stage sft \
+    --do_predict \
+    --model_name_or_path "" \
+    --adapter_name_or_path "" \
+    --eval_dataset ProcessData-Eval \
+    --dataset_dir "" \
+    --template "" \
+    --finetuning_type lora \
+    --output_dir "" \
+    --per_device_eval_batch_size 1 \
+    --predict_with_generate \
+    --max_new_tokens 512 \
+    --cutoff_len 8192 \
+    --overwrite_cache True \
+    --temperature 0.01 \
+    --bf16

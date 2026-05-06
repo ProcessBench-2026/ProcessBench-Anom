@@ -49,12 +49,6 @@ Which labeled panel happened earlier in the real manipulation sequence, X or Y?
 Choose exactly one label: X or Y.
 ```
 
-## Parsing rules
-
-- `processbench/parsing.py` accepts both answer tags and bare answer tokens
-- `T8` accepts either canonical labels or permutation strings
-- `T9` accepts canonical labels, panel labels, or `YES/NO` when applicable
-
 ## Baselines
 
 - random baseline = `1 / num_choices`

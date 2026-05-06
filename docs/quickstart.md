@@ -11,7 +11,7 @@ conda activate processbench
 
 ```bash
 python scripts/download_hf_artifacts.py \
-  --repo ProcessBench-2026/ProcessBench-Anon \
+  --repo ProcessBench-2026/ProcessBench-Anom \
   --out data/
 ```
 

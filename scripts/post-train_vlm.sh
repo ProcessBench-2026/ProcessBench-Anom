@@ -1,0 +1,24 @@
+accelerate launch \
+    --num_processes 4 \
+    --mixed_precision bf16 \
+    src/train.py \
+    --stage sft \
+    --do_train \
+    --model_name_or_path "" \
+    --dataset ProcessData-SFT \
+    --dataset_dir "" \
+    --template "" \
+    --finetuning_type lora \
+    --lora_target q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj \
+    --output_dir "" \
+    --overwrite_cache \
+    --per_device_train_batch_size 4 \
+    --gradient_accumulation_steps 1 \
+    --lr_scheduler_type cosine \
+    --logging_steps 10 \
+    --save_steps 500 \
+    --learning_rate 1e-4 \
+    --num_train_epochs 3.0 \
+    --plot_loss \
+    --bf16 \
+    --ddp_find_unused_parameters False

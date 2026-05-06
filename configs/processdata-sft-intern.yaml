@@ -1,0 +1,7 @@
+backbone: InternVL3-8B
+fine_tuning: LoRA
+lora_rank: 8
+lora_alpha: 16
+target_modules: o_proj, self_attn.v_proj, up_proj, self_attn.q_proj, gate_proj, down_proj, self_attn.k_proj
+temperature: 0.01
+max_tokens: 512

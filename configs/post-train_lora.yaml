@@ -1,0 +1,23 @@
+model:
+  backbone: 
+    -"Qwen2.5-VL-7B"
+    -"InternVL3-8B"
+  vision_encoder: "frozen"
+
+data:
+  train_split: "ProcessData-SFT"
+  eval_split: "ProcessData-Eval"
+
+method: "lora"
+
+lora:
+  rank: 8
+  alpha: 16
+
+training:
+  optimizer: "Adam"
+  learning_rate: 1.0e-4
+  scheduler: "cosine"
+  batch_size: 16
+  epochs: 3.0
+  random_seed: 42
