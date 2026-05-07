@@ -17,7 +17,7 @@ RoboProcessBench is a comprehensive benchmark for evaluating robotic process lea
   - YAML configs for evaluation, post-training, HF datasets, and SFT data processing
 
 - **`docs/`** — Documentation
-  - `quickstart.md` — Get started in 4 steps
+  - `quickstart.md` — Get started in 3 steps
   - `evaluation_protocol.md` — Detailed evaluation methodology
 
 - **`data/`** — Data directory (populated after downloading artifacts)
