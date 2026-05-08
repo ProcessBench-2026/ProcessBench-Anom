@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""
-从已评分的 JSONL 文件中统计整体及各题型(task_type)的正确率。
-输入格式示例每行:
-{"index": 0, "dataset": "GM100", "task_type": "T1", "task_id": "task_00001", 
- "recording_id": "None", "gold_answer": "B", "pred_answer": "B", 
- "raw_prediction": "B. approach", "correct": true}
-"""
+
 from __future__ import annotations
 
 import argparse
@@ -31,8 +25,7 @@ def main() -> None:
     if not jsonl_path.exists():
         raise FileNotFoundError(f"could not find: {jsonl_path}")
 
-    # 数据结构: {task_type: {"correct": int, "total": int}}
-    task_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"correct": 0, "total": 0})
+ task_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"correct": 0, "total": 0})
     dataset_stats: dict[str, dict[str, int]] = defaultdict(lambda: {"correct": 0, "total": 0})
     
     overall_correct = 0
@@ -47,7 +40,7 @@ def main() -> None:
             try:
                 row = json.loads(line)
             except json.JSONDecodeError as e:
-                print(f"⚠️ Line {line_no} JSON parsing failed, skipped: {e}")
+                print(f"Line {line_no} JSON parsing failed, skipped: {e}")
                 invalid_lines += 1
                 continue
 
@@ -55,23 +48,20 @@ def main() -> None:
             dataset = str(row.get("dataset", "UNKNOWN")).strip()
             is_correct = bool(row.get("correct", False))
 
-            # 累加题型统计
             task_stats[task_type]["total"] += 1
             if is_correct:
                 task_stats[task_type]["correct"] += 1
 
-            # 累加数据集统计（可选扩展）
             dataset_stats[dataset]["total"] += 1
             if is_correct:
                 dataset_stats[dataset]["correct"] += 1
 
-            # 全局统计
             overall_total += 1
             if is_correct:
                 overall_correct += 1
 
     if overall_total == 0:
-        print("❌ File contains no valid data lines.")
+        print("File contains no valid data lines.")
         return
 
     print("\n" + "=" * 50)
@@ -85,7 +75,7 @@ def main() -> None:
 
     overall_acc = overall_correct / overall_total
     print(f"{'Overall':<18} {overall_acc*100:>7.2f}% {overall_correct:>6} {overall_total:>6} {overall_total-overall_correct:>6}")
-    print(f"⚠️ Skipped invalid lines: {invalid_lines}\n")
+    print(f"Skipped invalid lines: {invalid_lines}\n")
 
     if args.output_json:
         out_path = Path(args.output_json)
@@ -114,7 +104,7 @@ def main() -> None:
             }
         }
         out_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"📁 Detailed statistics saved to: {out_path.resolve()}")
+        print(f"Detailed statistics saved to: {out_path.resolve()}")
 
 
 if __name__ == "__main__":
